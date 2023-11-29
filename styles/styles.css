@@ -44,11 +44,13 @@ a {
 
 
 .navbar {
+    padding:.5rem;
     background-color: var(--clr-rose-strong);
-    height: 30px;
+    height: 50px;
 }
 
 .ul_navbar {
+
     font-size: 1.3rem;
     display: flex;
     text-align: center;

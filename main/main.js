@@ -39,7 +39,7 @@ function cargarProductos(productosElegidos) {
          contenedorProductos.append(div);
 
     })
-    
+    actualizarBotonesAgregar();
 }
 
 
