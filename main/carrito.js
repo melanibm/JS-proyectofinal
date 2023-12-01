@@ -5,7 +5,6 @@ const contenedorCarritoVacio = document.querySelector("#carrito-vacio");
 const contenedorCarritoProductos = document.querySelector("#carrito-productos");
 const contenedorCarritoAcciones = document.querySelector("#carrito-acciones");
 const contenedorCarritoComprado = document.querySelector("#carrito-comprado");
-let botonesEliminnar = document.querySelectorAll(".carrito-producto-elliminar");
 const botonVaciar = document.querySelector("#carrito-acciones-vaciar");
 const contenedorTotal = document.querySelector("#total");
 const botonComprar = document.querySelector("#carrito-acciones-comprar")
@@ -43,7 +42,7 @@ function cargarProductosCarrito() {
                     <small>Subtotal</small>
                     <p>${producto.precio * producto.cantidad}</p>
                 </div>
-                <button class="carrito-producto-eliminar" id= "${producto.id}"><i class="bi bi-trash3-fill"></i></button>
+                
             `;
             contenedorCarritoProductos.append(div)
         })
@@ -72,36 +71,7 @@ function actualizarBotonesEliminar() {
     })
 }
 
-function eliminarDelCarrito(e) {
-    Toastify({
-        text: "Producto eliminado",
-        duration: 2000,
-        close: false,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "#4A5759",
-          borderRadius: "2rem",
-          textTransform: "uppercase",
-          fontSize: ".75rem",
-        },
-        offset: {
-            x: "1.5rem",
-            y: "1.5rem" 
-          },
-        onClick: function(){} 
-      }).showToast();
-    
-    const idBoton = e.currentTarget.id;
-    const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
 
-    productosEnCarrito.splice(index, 1);
-    cargarProductosCarrito();
-
-    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
-
-}
 botonVaciar.addEventListener("click", vaciarCarrito);
 function vaciarCarrito() {
     Swal.fire({
@@ -141,5 +111,96 @@ function comprarCarrito() {
     contenedorCarritoAcciones.classList.add("disabled");
     contenedorCarritoComprado.classList.remove("disabled");
 
+    const formularioCompraContainer = document.getElementById('formulario-compra-container');
+    formularioCompraContainer.classList.remove('disabled');
+
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const formularioCompra = document.getElementById('formulario-compra');
+
+    formularioCompra.addEventListener('submit', function (event) {
+        event.preventDefault(); 
+
+        
+        const nombre = document.getElementById('nombre').value;
+        const apellidos = document.getElementById('apellidos').value;
+        const correo = document.getElementById('correo').value;
+        const telefono = document.getElementById('telefono').value;
+        const formaPago = document.getElementById('forma-pago').value;
+
+        
+        console.log('Información del Cliente:');
+        console.log('Nombre:', nombre);
+        console.log('Apellidos:', apellidos);
+        console.log('Correo electrónico:', correo);
+        console.log('Teléfono:', telefono);
+        console.log('Forma de Pago:', formaPago);
+
+       
+        formularioCompra.reset();
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const formularioCompra = document.getElementById('formulario-compra');
+
+    formularioCompra.addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        
+        const nombre = document.getElementById('nombre').value;
+        const apellidos = document.getElementById('apellidos').value;
+        const correo = document.getElementById('correo').value;
+        const telefono = document.getElementById('telefono').value;
+        const formaPago = document.getElementById('forma-pago').value;
+
+    
+        const montoTotal = calcularMontoTotal(); 
+        
+        const fechaCompra = new Date().toLocaleDateString();
+
+       
+        const compra = {
+            nombre,
+            apellidos,
+            correo,
+            telefono,
+            formaPago,
+            fechaCompra,
+            montoTotal
+        };
+
+        
+        guardarCompraEnHistorial(compra);
+
+    
+        formularioCompra.reset();
+    });
+
+    function calcularMontoTotal() {
+    
+        const productosEnCarrito = obtenerProductosEnCarrito();
+        const montoTotal = productosEnCarrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
+        return montoTotal;
+    }
+
+    function obtenerProductosEnCarrito() {
+        
+        const productosEnCarrito = localStorage.getItem("productos-en-carrito");
+        return JSON.parse(productosEnCarrito) || [];
+    }
+
+    function guardarCompraEnHistorial(compra) {
+    
+        const historialCompras = obtenerHistorialCompras();
+        historialCompras.push(compra);
+        localStorage.setItem('historial-compras', JSON.stringify(historialCompras));
+    }
+
+    function obtenerHistorialCompras() {
+        const historialCompras = localStorage.getItem('historial-compras');
+        return JSON.parse(historialCompras) || [];
+    }
+});
+
 

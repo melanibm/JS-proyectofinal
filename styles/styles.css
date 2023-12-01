@@ -61,6 +61,8 @@ a {
 }
 .cont_inicio {
     padding: 3rem;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
     background-color: var(--clr-ligth-grey);
     display: flex;
     flex-direction: column;
@@ -138,7 +140,8 @@ main {
 .carrito-vacio,
 .carrito-comprado {
     color: var(--clr-main);
-    display: noe;
+    display: none;
+    
 }
 
 .carrito-productos {
@@ -214,4 +217,19 @@ main {
 
 .disabled {
     display: none; 
+}
+
+#historialCompras {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.card {
+    width: 18rem;
+    margin-bottom: 20px;
+}
+
+.formulario-compra-container.disabled {
+    display: none;
 }
