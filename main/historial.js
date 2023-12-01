@@ -51,3 +51,4 @@ document.addEventListener('DOMContentLoaded', function () {
         return JSON.parse(historialCompras) || [];
     }
 });
+
